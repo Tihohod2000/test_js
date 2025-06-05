@@ -5,6 +5,36 @@
     <title>Title</title>
 </head>
 <body>
+<h1>Загрузите любой файл</h1>
+<form id="uploadForm">
+    <input type="file" name="file" id="fileInput">
+    <button type="submit">Загрузить</button>
+</form>
+<div id="result"></div>
 
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fileInput = document.getElementById('fileInput');
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        try {
+            const response = await fetch('http://localhost:3000/upload', {
+                method: 'PUT',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerHTML =
+                result.success
+                    ? `Файл "${result.file.originalname}" успешно загружен!`
+                    : `Ошибка: ${result.error}`;
+        } catch (error) {
+            document.getElementById('result').innerHTML = `Ошибка: ${error.message}`;
+        }
+    });
+</script>
 </body>
 </html>
