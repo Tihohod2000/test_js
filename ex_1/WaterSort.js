@@ -39,11 +39,14 @@ class WaterSort {
     mixingLiquids() {
         const nonEmptyColbs = this.colbs.filter(colb => colb.length > 0);
 
-        for (let numColb1 = 0, numColb2 = 1; (numColb1 < nonEmptyColbs.length - 1) && (numColb2 < nonEmptyColbs.length); numColb1++, numColb2++) {
-
+        for (
+            let numColb1 = 0, numColb2 = 1; (numColb1 < nonEmptyColbs.length - 1) &&
+        (numColb2 < nonEmptyColbs.length); numColb1++, numColb2++
+        ) {
             for (let i = nonEmptyColbs[numColb1].length - 1; i > 0; i--) {
                 let j = Math.floor(Math.random() * (i + 1));
-                [nonEmptyColbs[numColb1][i], nonEmptyColbs[numColb2][j]] = [nonEmptyColbs[numColb2][j], nonEmptyColbs[numColb1][i]];
+                [nonEmptyColbs[numColb1][i], nonEmptyColbs[numColb2][j]] =
+                    [nonEmptyColbs[numColb2][j], nonEmptyColbs[numColb1][i]];
                 // console.log(nonEmptyColbs);
             }
         }
@@ -52,9 +55,14 @@ class WaterSort {
 
     calculateMoves() {
         while (!this.isSolved()) {
+
             for (let i = 0; i < this.colbs.length; i++) {
                 let firstColor = this.colbs[i][this.colbs[i].length - 1];
-                if ((this.colbs[i].every(color => color === firstColor) && (this.colbs[i].length < this.volume)) || this.colbs[i].length === 0) {
+                const isOneColorOrEmpty = (this.colbs[i].every(color => color === firstColor) &&
+                        (this.colbs[i].length < this.volume)) ||
+                        this.colbs[i].length === 0;
+
+                if (isOneColorOrEmpty) {
                     for (let j = 0; j < this.colbs.length; j++) {
                         if (i === j) continue;
 
