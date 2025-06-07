@@ -7,8 +7,7 @@ import path from 'path';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 import cron from 'node-cron';
-
-
+import fs from 'fs';
 
 
 const fileDirPath = process.cwd() + '/uploads';
@@ -22,13 +21,36 @@ const storage = multer.diskStorage({
         callback(null, safeName);
     },
 });
+
+
 const timeAlive: number = Number(process.env.TIME_ALIVE || 30) * 1000 * 60;
+const port = process.env.PORT || 8000;
 
 const upload = multer({ storage });
-
 const app = express();
 app.use(cors());
-const port = process.env.PORT || 8000;
+
+
+cron.schedule('*/5 * * * *', () => {
+    console.log('Запускаем cron');
+
+    const files = fs.readdirSync(fileDirPath);
+    // const timeNow = Date.now();
+    let fileDeleted = 0;
+
+    for(let file of files){
+        const fileTimeStemp = parseInt(file.split('_')[0])
+        if(!validTtlFile(fileTimeStemp, timeAlive)){
+            const fullPath = path.join(fileDirPath, file);
+            fs.unlinkSync(fullPath);
+            console.log(`файл был удалён ${fullPath} cron`);
+            fileDeleted++;
+        }
+    }
+    console.log(`Удалено ${fileDeleted} файлов`);
+
+});
+
 
 app.put('/upload-file', upload.single('file'), (req: Request, res: Response) => {
     if (!req.file) {
@@ -45,7 +67,7 @@ app.get('/download/:filename', (req: Request, res: Response) => {
     const timestamp = parseInt(filename.split('_')[0]);
 
     if (!validTtlFile(timestamp, timeAlive)) {
-        res.status(400).json({ error: 'link expired' })
+        res.status(400).json({ error: 'Not found file' })
     }
 
     const filePath = path.join(fileDirPath, filename);
