@@ -1,19 +1,57 @@
-import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express, { Request, Response } from 'express';
+import multer from 'multer';
+import path from 'path';
+import cors from 'cors';
+
+
+
+
+const fileDirPath = process.cwd() + '/uploads';
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, fileDirPath);
+    },
+    filename: (req, file, callback) => {
+        callback(null, `${Date.now()}.${file.originalname.replace(' ', '')}`);
+    },
+});
+const timeAlive: number = Number(process.env.TIME_ALIVE || 30) * 1000 * 60;
+
+const upload = multer({ storage });
 
 const app = express();
-const PORT = 3000;
+app.use(cors());
+const port = process.env.PORT || 8000;
 
-// Встроенный middleware для парсинга JSON
-app.use(express.json());
+app.put('/upload-file', upload.single('file'), (req: Request, res: Response) => {
+    if (!req.file) {
+        res.status(400)
+        return;
+    }
+    const generatedLink = `http://localhost:${port}/download/${req.file.filename}`;
 
-app.post('/api/data', (req, res) => {
-    const receivedData = req.body;
-    console.log('Получены данные:', receivedData);
-    // console.log('Получены данные:', req);
-
-    res.json({ message: 'Данные успешно получены', data: receivedData });
+    res.status(200).json({ link: generatedLink });
 });
 
-app.listen(PORT, () => {
-    console.log(`Сервер запущен на http://localhost:${PORT}`);
+app.get('/download/:filename', (req: Request, res: Response) => {
+    const filename = req.params.filename;
+    const timestamp = parseInt(filename.split('.')[0]);
+
+    if (!validTtlFile(timestamp, timeAlive)) {
+        res.status(400).json({ error: 'link expired' })
+    }
+
+    const filePath = path.join(fileDirPath, filename);
+    res.download(filePath);
 });
+
+app.listen(port, () => {
+    console.log(`✅ Сервер запущен: http://localhost:${port}`);
+});
+
+function validTtlFile(timestamp: number, ttl: number) {
+    return (Date.now() - timestamp) < ttl;
+}

@@ -27,9 +27,11 @@
             });
 
             const result = await response.json();
+            console.log(result);
+            console.log(result.link);
             document.getElementById('result').innerHTML =
-                result.success
-                    ? `Файл "${result.file.originalname}" успешно загружен!`
+                result.link
+                    ? `Файл доступен по ссылке: "${result.link}"`
                     : `Ошибка: ${result.error}`;
         } catch (error) {
             document.getElementById('result').innerHTML = `Ошибка: ${error.message}`;
