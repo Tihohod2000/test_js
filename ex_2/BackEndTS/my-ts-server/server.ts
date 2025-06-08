@@ -6,6 +6,9 @@ import {port, fileDirPath, timeAlive} from './src/config';
 import {upload} from "./src/storage";
 import './src/cron';
 import {validTtlFile} from "./src/utils";
+import {redis} from "./src/redis"
+
+
 
 dotenv.config();
 
@@ -17,6 +20,9 @@ app.post('/upload-file', upload.single('file'), (req: Request, res: Response) =>
         res.status(400)
         return;
     }
+    //get uuid for file
+    //save info by uuid
+
     const generatedLink = `http://localhost:${port}/download/${req.file.filename}`;
 
     res.status(200).json({link: generatedLink});
