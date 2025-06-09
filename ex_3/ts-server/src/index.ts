@@ -21,11 +21,7 @@ app.get('/weather', upload.none(), async (req: Request, res: Response) => {
     if (!city){
         res.status(400).send("Город не указан");
     }else{
-    // res.json(city);
         res.json(await searchCity(city.toString()));
-
-
-
 
     }
     console.log(city);
