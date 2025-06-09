@@ -15,26 +15,39 @@ dotenv.config();
 const app = express();
 app.use(cors());
 
-app.post('/upload-file', upload.single('file'), (req: Request, res: Response) => {
+app.post('/upload-file', upload.single('file'), async (req: Request, res: Response) => {
     if (!req.file) {
         res.status(400)
         return;
     }
-    //get uuid for file
-    //save info by uuid
 
-    const generatedLink = `http://localhost:${port}/download/${req.file.filename}`;
+    const uploadFile = {
+        uuid: req.file.filename.split('.')[0],
+        path: `${req.file.filename}`,
+        createdAt: Date.now(),
+        updateAt: Date.now(),
+        countDownload: 0
+    }
+
+    await redis.set(`file:${req.file.filename.split('.')[0]}`, JSON.stringify(uploadFile));
+
+    const generatedLink = `http://localhost:${port}/download/file:${req.file.filename}`;
 
     res.status(200).json({link: generatedLink});
 });
 
-app.get('/download/:filename', (req: Request, res: Response) => {
-    const filename = req.params.filename;
-    const timestamp = parseInt(filename.split('_')[0]);
+app.get('/download/:filename', async (req: Request, res: Response)  =>  {
+    const filename = req.params.filename.split(':')[1];
+    const keyOfFile = req.params.filename.split('.')[0];
 
-    if (!validTtlFile(timestamp, timeAlive)) {
-        res.status(400).json({error: 'Not found file'})
+    const obj = await redis.get(keyOfFile);
+
+    if(obj !== null) {
+        const jsonObj = JSON.parse(obj);
+        jsonObj.updateAt = Date.now();
+        await redis.set(keyOfFile, JSON.stringify(jsonObj));
     }
+    console.log(filename);
 
     const filePath = path.join(fileDirPath, filename);
     res.download(filePath);

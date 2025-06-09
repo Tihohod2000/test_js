@@ -8,15 +8,15 @@ function copyToClipboard() {
 }
 
 
-document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+document.getElementById('cityFormForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const fileInput = document.getElementById('fileInput');
+    const cityInput = document.getElementById('cityInput');
     const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
+    // formData.append('file', fileInput.files[0]);
 
     try {
-        const response = await fetch('http://localhost:3000/upload-file', {
+        const response = await fetch('http://localhost:3000/weather', {
             method: 'POST',
             body: formData
         });
@@ -25,10 +25,10 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         const result = await response.json();
 
         document.getElementById('status-load').innerHTML = `Загрузка завершена`;
-        document.getElementById('result').innerHTML =
-            result.link
-                ? `${result.link}`
-                : `Ошибка: ${result.error}`;
+        // document.getElementById('result').innerHTML =
+        //     result.link
+        //         ? `${result.link}`
+        //         : `Ошибка: ${result.error}`;
     } catch (error) {
         document.getElementById('result').innerHTML = `Ошибка: ${error.message}`;
     }

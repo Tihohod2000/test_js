@@ -9,7 +9,7 @@ export const storage = multer.diskStorage({
     },
     filename: (req, file, callback) => {
         const ext = path.extname(file.originalname);
-        const safeName = `${Date.now()}_${uuidv4()}${ext}`;
+        const safeName = `${uuidv4()}${ext}`;
         callback(null, safeName);
     },
 });

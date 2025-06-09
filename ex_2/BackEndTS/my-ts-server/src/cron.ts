@@ -9,30 +9,59 @@ import {redis} from "./redis"
 cron.schedule('*/1 * * * *', async () => {
     console.log('Запуск cron-задачи');
 
-    await redis.set('JS', JSON.stringify({name : "jhsdfa"}));
-    await redis.set('key12', "sdfsd");
-    await redis.set('key13', "sdfsd");
-    await redis.set('key14', "sdfsd");
 
-    let redisInf = await redis.keys("*");
+    let keys = await redis.keys("*");
 
-    console.log(redisInf);
-
-    let keyJson = await redis.get('JS') || ""
-
-    console.log(JSON.parse(keyJson));
-
-    const files = fs.readdirSync(fileDirPath);
-    let deleted = 0;
-
-    for (const file of files) {
-        const timestamp = parseInt(file.split('_')[0]);
-        if (!validTtlFile(timestamp, timeAlive)) {
-            fs.unlinkSync(path.join(fileDirPath, file));
-            console.log(`Удалён файл: ${file}`);
-            deleted++;
-        }
+    for (let key of keys) {
+        const ttl = await redis.ttl(key);
+        if (ttl === -2) continue; // ключа уже нет
+        if (ttl === -1) console.log(`${key} бессрочный`);
+        else console.log(`${key} живёт ещё ${ttl} секунд`);
     }
 
+    // console.log(keys);
+
+    let deleted = 0;
+
+    const files = fs.readdirSync(fileDirPath);
+
+    for(let file of files) {
+        const key = file.split('.')[0];
+        // console.log(key)
+
+        const obj = await redis.get(`file:${key}`);
+
+        if(obj === null) {
+            fs.unlinkSync(path.join(fileDirPath, file));
+            await redis.del(key);
+            deleted++;
+        }else{
+            console.log("Объект ещё есть");
+            const jsonObj = JSON.parse(obj);
+
+            if(Date.now() - jsonObj.updateAt > timeAlive) {
+                fs.unlinkSync(path.join(fileDirPath, file));
+                await redis.del(key);
+                deleted++;
+            }
+
+        }
+
+    }
+
+    // for (const key of keys) {
+    //     const keyOfFile = file.split('.')[0];
+    //     let ttl = await redis.ttl(key);
+    //     console.log(ttl);
+    //     if(ttl < 0) {
+    //         fs.unlinkSync(path.join(fileDirPath, `key`));
+    //         console.log(`Удалён файл: ${file}`);
+    //         deleted++;
+    //         await redis.del(keyOfFile);
+    //
+    //     }
+    // }
+
     console.log(`Удалено файлов: ${deleted}`);
+    // console.log(await redis.keys("*"));
 });
