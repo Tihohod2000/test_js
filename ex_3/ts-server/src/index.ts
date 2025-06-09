@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import {redis} from "./redis";
+import cors from "cors";
 
 import multer from 'multer';
 import {searchCity} from "./searchCity";
@@ -7,6 +8,8 @@ import {searchCity} from "./searchCity";
 const app = express();
 const upload = multer();
 const PORT = 3000;
+
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {
@@ -18,8 +21,9 @@ app.get('/weather', upload.none(), async (req: Request, res: Response) => {
     if (!city){
         res.status(400).send("Город не указан");
     }else{
-    res.json(city);
-    await searchCity(city.toString());
+    // res.json(city);
+        res.json(await searchCity(city.toString()));
+
 
 
 
