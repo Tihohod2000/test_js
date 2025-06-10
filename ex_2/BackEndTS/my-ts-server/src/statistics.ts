@@ -12,7 +12,7 @@ export async function updataStatistics(){
     if(count){
         await redis.set(`stat:${formattedDate}`, Number(count) + 1);
     }else{
-        await redis.set(formattedDate, 1, "EX", 60*60*24*30);
+        await redis.set(`stat:${formattedDate}`, 1, "EX", 60*60*24*30);
     }
 }
 

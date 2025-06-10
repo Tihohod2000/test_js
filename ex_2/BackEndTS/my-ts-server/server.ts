@@ -25,6 +25,8 @@ app.post('/upload-file', upload.single('file'), async (req: Request, res: Respon
         countDownload: 0
     }
     // console.log(uploadFileObj);
+
+
     const [generatedLink, statistics] = await Promise.all([uploadFile(uploadFileObj), getStatistics()]);
     res.status(200).json(
         {
