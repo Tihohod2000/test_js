@@ -1,4 +1,4 @@
-class WaterSort {
+export class WaterSort {
     constructor(numColbs, volume, numColors) {
         this.numColbs = numColbs;
         this.volume = volume;
@@ -33,7 +33,26 @@ class WaterSort {
         }
 
         this.mixingLiquids();
+        // console.log(this.colbs);
+        this.stayColbs()
         this.calculateMoves();
+        // console.log(this.colbs);
+        this.stayColbs()
+    }
+
+    stayColbs() {
+        for (let i = 0; i < this.volume; i++) {
+            let stayColb = [];
+            for(let j of this.colbs) {
+                if(j.length>0){
+                    stayColb.push(j[i]);
+                }else{
+                    stayColb.push(0);
+                }
+            }
+
+            console.log(stayColb);
+        }
     }
 
     mixingLiquids() {
@@ -103,10 +122,3 @@ class WaterSort {
 
 
 }// Пример использования
-try {
-    const game = new WaterSort(5, 4, 3); // 5 колбочек, объем 4, 3 цвета
-
-    console.log('Игра решена?', game.isSolved());
-} catch (error) {
-    console.error("Ошибка:", error.message);
-}

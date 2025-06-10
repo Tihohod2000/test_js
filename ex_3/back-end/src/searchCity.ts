@@ -1,11 +1,12 @@
 import {redis} from "./redis";
+import {timealive} from "./config";
 
 export async function searchCity(cityName: string) {
 
-    const cityObject = await redis.get(`${cityName}`);
+    const cityObject = await redis.get(`cityName:${cityName}`);
     if (cityObject) {
         console.log("Данные уже есть");
-        await redis.expire(`${cityName}`, 60 * 15);
+        await redis.expire(`cityName:${cityName}`, timealive * 60);
         return JSON.parse(cityObject);
     }
 
@@ -28,9 +29,7 @@ export async function searchCity(cityName: string) {
             metioData: metioData
         }
 
-        await redis.set(cityName, JSON.stringify(City), "EX", 60*15);
-        console.log(await redis.get(cityName));
-        console.log(await redis.ttl(cityName));
+        await redis.set(`cityName:${cityName}`, JSON.stringify(City), "EX", timealive * 60);
         return City;
 
     } catch (error) {

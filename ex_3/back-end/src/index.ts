@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, {Request, Response} from 'express';
 import cors from "cors";
 import {port} from "./config";
 import multer from 'multer';
@@ -12,10 +12,10 @@ app.use(express.json());
 
 
 app.get('/weather', upload.none(), async (req: Request, res: Response) => {
-    const city = req.query.city;
-    if (!city){
+    const city: any = req.query.city;
+    if (!city) {
         res.status(400).send("Город не указан");
-    }else{
+    } else {
         res.json(await searchCity(city.toString()));
     }
 });
