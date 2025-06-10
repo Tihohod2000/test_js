@@ -1,10 +1,11 @@
 export class WaterSort {
-    constructor(numColbs, volume, numColors) {
-        this.numColbs = numColbs;
-        this.volume = volume;
-        this.numColors = numColors;
-        this.emptyColbs = numColbs - numColors;
-        this.colbs = [];
+    constructor(colbs) {
+        this.numColbs = colbs.length;
+
+        this.volume = (colbs.sort((a,b) => a > b)[0]).length;
+        this.numColors = colbs.length - 2;
+        this.emptyColbs = colbs.length - this.numColors;
+        this.colbs = colbs;
 
         this.validateInput();
         this.startGame();
@@ -23,16 +24,16 @@ export class WaterSort {
 
 
     startGame() {
-        for (let i = 0; i < this.numColors; i++) {
-            this.colbs.push(new Array(this.volume).fill(i + 1));
-        }
+        // for (let i = 0; i < this.numColors; i++) {
+        //     this.colbs.push(new Array(this.volume).fill(i + 1));
+        // }
+        //
+        //
+        // for (let i = 0; i < this.emptyColbs; i++) {
+        //     this.colbs.push([]);
+        // }
 
-
-        for (let i = 0; i < this.emptyColbs; i++) {
-            this.colbs.push([]);
-        }
-
-        this.mixingLiquids();
+        // this.mixingLiquids();
         // console.log(this.colbs);
         this.stayColbs()
         this.calculateMoves();
