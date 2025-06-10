@@ -5,13 +5,11 @@ export async function searchCity(cityName: string) {
 
     const cityObject = await redis.get(`cityName:${cityName}`);
     if (cityObject) {
-        console.log("Данные уже есть");
         await redis.expire(`cityName:${cityName}`, timealive * 60);
         return JSON.parse(cityObject);
     }
 
     try {
-        console.log(cityName);
         let res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${cityName}`);
 
         if (!res.ok) {
@@ -43,7 +41,6 @@ export async function searchCity(cityName: string) {
 async function gettingMetio(lat: number, lon: number) {
     const res = await fetch(`https://api.open-meteo.com/v1/forecast?`
         + `latitude=${lat}&longitude=${lon}&hourly=temperature_2m`)
-    console.log(res.url);
     const data = await res.json().catch(() => null);
 
     //оставляем часы текущего дня и соответствующие температуры
