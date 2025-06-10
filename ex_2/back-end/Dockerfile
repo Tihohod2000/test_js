@@ -2,9 +2,9 @@ FROM node:22-alpine as development
 
 WORKDIR /app/
 
-#COPY package*.json package-lock.json tsconfig.json ./
-#COPY src ./src
-COPY . .
+COPY package*.json tsconfig.json ./
+COPY src ./src
+#COPY . .
 
 
 RUN npm install

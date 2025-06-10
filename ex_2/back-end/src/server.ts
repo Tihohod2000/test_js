@@ -1,11 +1,11 @@
 import express, {Request, Response} from 'express';
 import cors from 'cors';
-import './src/cron';
-import {port} from './src/config';
-import {upload} from "./src/storage";
-import {downloadFile} from "./src/downloadFile";
-import {uploadFile} from "./src/uploadFile";
-import {getStatistics} from "./src/statistics";
+import './cron';
+import {port} from './config';
+import {upload} from "./storage";
+import {downloadFile} from "./downloadFile";
+import {uploadFile} from "./uploadFile";
+import {getStatistics} from "./statistics";
 
 const app = express();
 app.use(cors());

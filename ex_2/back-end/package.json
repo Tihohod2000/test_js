@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node-dev --respawn server.ts",
-    "run:dev": "nodemon --watch src --exec ts-node server.ts",
-    "dev2": "ts-node-dev --respawn server.ts"
+    "start": "ts-node-dev --respawn src/server.ts",
+    "run:dev": "nodemon --watch src --exec ts-node src/server.ts",
+    "dev2": "ts-node-dev --respawn src/server.ts"
   },
   "keywords": [],
   "author": "",
