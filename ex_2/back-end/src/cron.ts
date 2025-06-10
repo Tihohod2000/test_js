@@ -7,7 +7,6 @@ import {redis} from "./redis"
 
 cron.schedule('*/1 * * * *', async () => {
     console.log('Запуск cron-задачи');
-    // console.log(fileDirPath)
 
     let deleted: number = 0;
     const files: string[] = fs.readdirSync(fileDirPath);
