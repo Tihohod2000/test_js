@@ -16,7 +16,8 @@ export async function searchCity(cityName: string) {
 
         if (!res.ok) {
             const errorData = await res.json().catch(() => null);
-            throw new Error(`HTTP error! status: ${res.status}, message: ${errorData?.message || 'Unknown error'}`);
+            throw new Error(`HTTP error! status: ${res.status},` +
+                `message: ${errorData?.message || 'Unknown error'}`);
         }
 
         const data = await res.json();
@@ -44,7 +45,9 @@ async function gettingMetio(lat: number, lon: number) {
         + `latitude=${lat}&longitude=${lon}&hourly=temperature_2m`)
     console.log(res.url);
     const data = await res.json().catch(() => null);
-    const time: Array<string> = (data.hourly.time).slice(0, 24); //оставляем часы текущего дня и соответствующие температуры
+
+    //оставляем часы текущего дня и соответствующие температуры
+    const time: Array<string> = (data.hourly.time).slice(0, 24);
     const temperature: Array<number> = (data.hourly.temperature_2m).slice(0, 24);
     return {
         time: time,
