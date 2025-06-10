@@ -32,7 +32,7 @@ docker-compose up
 
 Сервер запускается по пути ```http://localhost:3000```
 
-front-end доступен по пути ```http://localhost/```
+front-end доступен по пути ```http://localhost:80```
 
 **3. Перейти по пути http://localhost/**
 
@@ -52,6 +52,6 @@ docker-compose up
 
 Сервер запускается по пути ```http://localhost:3000```
 
-front-end доступен по пути ```http://localhost/```
+front-end доступен по пути ```http://localhost:80```
 
 **3. Перейти по пути http://localhost/**
