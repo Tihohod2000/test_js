@@ -5,6 +5,7 @@ import {port} from './src/config';
 import {upload} from "./src/storage";
 import {downloadFile} from "./src/downloadFile";
 import {uploadFile} from "./src/uploadFile";
+import {getStatistics} from "./src/statistics";
 
 const app = express();
 app.use(cors());
@@ -24,8 +25,13 @@ app.post('/upload-file', upload.single('file'), async (req: Request, res: Respon
         countDownload: 0
     }
     console.log(uploadFileObj);
-    const generatedLink: string = await uploadFile(uploadFileObj);
-    res.status(200).json({link: generatedLink});
+    const [generatedLink, statistics] = await Promise.all([uploadFile(uploadFileObj), getStatistics()]);
+    res.status(200).json(
+        {
+            link: generatedLink,
+            statistics: statistics
+        }
+        );
 });
 
 app.get('/download/:filename', async (req: Request, res: Response) => {

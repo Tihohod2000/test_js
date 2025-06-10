@@ -24,6 +24,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
 
         document.getElementById('status-load').innerHTML = `Загрузка...`;
         const result = await response.json();
+        console.log(result);
 
         document.getElementById('status-load').innerHTML = `Загрузка завершена`;
         document.getElementById('result').innerHTML =
