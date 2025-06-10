@@ -42,7 +42,7 @@ front-end доступен по пути ```http://localhost/```
 ### Для запуска следует:
 **1. скопировать содержимое ".env.example" в новый файл ".env" в папку ex_2.**
 ```
-cp .env.example .env
+cp env.example .env
 ```
 
 **2. Запуск проекта с docker-compose**
