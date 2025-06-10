@@ -5,7 +5,8 @@ WORKDIR /app
 
 COPY package*.json tsconfig.json ./
 RUN npm install
-CMD ["mkdir", "uploads"]
+
+RUN mkdir uploads
 
 COPY src ./src
 
