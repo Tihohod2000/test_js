@@ -25,11 +25,9 @@ document.getElementById('cityForm').addEventListener('submit', async (e) => {
         }
 
         const data = await response.json();
-        // console.log(data);
 
         resultElement.textContent = `Погода в ${cityInput}`;
         statusElement.textContent = 'Загрузка завершена';
-
 
 
         const ctx = document.getElementById('temperatureChart').getContext('2d');
@@ -62,9 +60,6 @@ document.getElementById('cityForm').addEventListener('submit', async (e) => {
                 }
             }
         });
-
-
-
 
 
     } catch (error) {

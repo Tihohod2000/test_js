@@ -32,8 +32,6 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
                 : `Ошибка: ${result.error}`;
 
 
-
-
         const ctx = document.getElementById('statistics').getContext('2d');
 
         // Уничтожаем предыдущий график

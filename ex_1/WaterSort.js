@@ -4,12 +4,10 @@ export class WaterSort {
 
         this.volume = (colbs.sort((a,b) => a > b)[0]).length;
         this.numColors = colbs.length - 2;
-        this.emptyColbs = colbs.length - this.numColors;
         this.colbs = colbs;
 
         this.validateInput();
         this.startGame();
-
     }
 
 
@@ -24,20 +22,8 @@ export class WaterSort {
 
 
     startGame() {
-        // for (let i = 0; i < this.numColors; i++) {
-        //     this.colbs.push(new Array(this.volume).fill(i + 1));
-        // }
-        //
-        //
-        // for (let i = 0; i < this.emptyColbs; i++) {
-        //     this.colbs.push([]);
-        // }
-
-        // this.mixingLiquids();
-        // console.log(this.colbs);
         this.stayColbs()
         this.calculateMoves();
-        // console.log(this.colbs);
         this.stayColbs()
     }
 
@@ -53,22 +39,6 @@ export class WaterSort {
             }
 
             console.log(stayColb);
-        }
-    }
-
-    mixingLiquids() {
-        const nonEmptyColbs = this.colbs.filter(colb => colb.length > 0);
-
-        for (
-            let numColb1 = 0, numColb2 = 1; (numColb1 < nonEmptyColbs.length - 1) &&
-        (numColb2 < nonEmptyColbs.length); numColb1++, numColb2++
-        ) {
-            for (let i = nonEmptyColbs[numColb1].length - 1; i > 0; i--) {
-                let j = Math.floor(Math.random() * (i + 1));
-                [nonEmptyColbs[numColb1][i], nonEmptyColbs[numColb2][j]] =
-                    [nonEmptyColbs[numColb2][j], nonEmptyColbs[numColb1][i]];
-                // console.log(nonEmptyColbs);
-            }
         }
     }
 
@@ -120,6 +90,4 @@ export class WaterSort {
 
         return false;
     }
-
-
-}// Пример использования
+}
