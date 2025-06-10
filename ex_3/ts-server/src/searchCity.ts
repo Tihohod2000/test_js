@@ -19,12 +19,8 @@ export async function searchCity(cityName: string) {
         }
 
         const data = await res.json();
-        // console.log(data);
-
         const lat = data.results[0].latitude;
         const lon = data.results[0].longitude;
-
-
         const metioData = await gettingMetio(lat, lon);
 
         const City = {
@@ -35,8 +31,6 @@ export async function searchCity(cityName: string) {
         await redis.set(cityName, JSON.stringify(City), "EX", 60*15);
         console.log(await redis.get(cityName));
         console.log(await redis.ttl(cityName));
-
-
         return City;
 
     } catch (error) {

@@ -1,13 +1,12 @@
 import express, { Request, Response } from 'express';
-import {redis} from "./redis";
 import cors from "cors";
+import {port} from "./config";
 
 import multer from 'multer';
 import {searchCity} from "./searchCity";
 
 const app = express();
 const upload = multer();
-const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -24,9 +23,9 @@ app.get('/weather', upload.none(), async (req: Request, res: Response) => {
         res.json(await searchCity(city.toString()));
 
     }
-    console.log(city);
+    // console.log(city);
 });
 
-app.listen(PORT, () => {
-    console.log(`✅ Сервер запущен: http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`✅ Сервер запущен: http://localhost:${port}`);
 });

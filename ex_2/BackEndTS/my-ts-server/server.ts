@@ -1,16 +1,10 @@
-import dotenv from 'dotenv';
 import express, {Request, Response} from 'express';
 import path from 'path';
 import cors from 'cors';
-import {port, fileDirPath, timeAlive} from './src/config';
-import {upload} from "./src/storage";
 import './src/cron';
-import {validTtlFile} from "./src/utils";
+import {port, fileDirPath} from './src/config';
+import {upload} from "./src/storage";
 import {redis} from "./src/redis"
-
-
-
-dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -29,27 +23,29 @@ app.post('/upload-file', upload.single('file'), async (req: Request, res: Respon
         countDownload: 0
     }
 
-    await redis.set(`file:${req.file.filename.split('.')[0]}`, JSON.stringify(uploadFile));
+    const key: string = `file:${req.file.filename.split('.')[0]}`;
+
+    await redis.set(key, JSON.stringify(uploadFile));
 
     const generatedLink = `http://localhost:${port}/download/file:${req.file.filename}`;
 
     res.status(200).json({link: generatedLink});
 });
 
-app.get('/download/:filename', async (req: Request, res: Response)  =>  {
-    const filename = req.params.filename.split(':')[1];
-    const keyOfFile = req.params.filename.split('.')[0];
+app.get('/download/:filename', async (req: Request, res: Response) => {
+    const filename: string = req.params.filename.split(':')[1];
+    const keyOfFile: string = req.params.filename.split('.')[0];
 
-    const obj = await redis.get(keyOfFile);
+    const obj: string = (await redis.get(keyOfFile)) || "";
 
-    if(obj !== null) {
+    if (obj) {
         const jsonObj = JSON.parse(obj);
         jsonObj.updateAt = Date.now();
         await redis.set(keyOfFile, JSON.stringify(jsonObj));
     }
     console.log(filename);
 
-    const filePath = path.join(fileDirPath, filename);
+    const filePath: string = path.join(fileDirPath, filename);
     res.download(filePath);
 });
 
