@@ -7,6 +7,7 @@ import {redis} from "./redis"
 
 cron.schedule('*/1 * * * *', async () => {
     console.log('Запуск cron-задачи');
+    // console.log(fileDirPath)
 
     let deleted: number = 0;
     const files: string[] = fs.readdirSync(fileDirPath);
@@ -15,9 +16,8 @@ cron.schedule('*/1 * * * *', async () => {
         const key: string = file.split('.')[0];
         const obj: string = await redis.get(`file:${key}`) || "";
 
-        if (obj) {
+        if (!obj) {
             fs.unlinkSync(path.join(fileDirPath, file));
-            await redis.del(key);
             deleted++;
         } else {
             const jsonObj = JSON.parse(obj);

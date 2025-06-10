@@ -49,11 +49,11 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             data: {
                 labels: result.statistics.time,
                 datasets: [{
-                    label: 'Температура',
+                    label: 'Скачивания',
                     data: result.statistics.count,
                     borderColor: 'rgb(5,144,239)',
                     backgroundColor: 'rgba(0,160,255,0.29)',
-                    tension: 0.1,
+                    tension: 1,
                     fill: true
                 }]
             },
@@ -61,7 +61,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: false
+                        beginAtZero: true
                     }
                 }
             }
