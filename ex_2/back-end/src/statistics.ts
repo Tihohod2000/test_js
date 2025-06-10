@@ -1,12 +1,12 @@
 import {redis} from "./redis";
 
 export async function updataStatistics(){
-    // const dayNow: string = String(new Date().getDate());
     const now = new Date();
     const day: string = now.getDate().toString();
     const month: string = (now.getMonth() + 1).toString();
     const year: string = now.getFullYear().toString();
-    const formattedDate: string = `${day.padStart(2, '0')}.${month.padStart(2, '0')}.${year}`;
+    const formattedDate: string =
+        `${day.padStart(2, '0')}.${month.padStart(2, '0')}.${year}`;
 
     const count: string = await redis.get(`stat:${formattedDate}`) || "";
     if(count){

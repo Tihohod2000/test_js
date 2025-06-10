@@ -3,8 +3,8 @@ import cors from 'cors';
 import './cron';
 import {port} from './config';
 import {upload} from "./storage";
-import {downloadFile} from "./downloadFile";
-import {uploadFile} from "./uploadFile";
+import {downloadFile} from "./download-file";
+import {uploadFile} from "./upload-file";
 import {getStatistics} from "./statistics";
 
 const app = express();
@@ -24,8 +24,6 @@ app.post('/upload-file', upload.single('file'), async (req: Request, res: Respon
         updateAt: Date.now(),
         countDownload: 0
     }
-    // console.log(uploadFileObj);
-
 
     const [generatedLink, statistics] = await Promise.all([uploadFile(uploadFileObj), getStatistics()]);
     res.status(200).json(
@@ -33,7 +31,7 @@ app.post('/upload-file', upload.single('file'), async (req: Request, res: Respon
             link: generatedLink,
             statistics: statistics
         }
-        );
+    );
 });
 
 app.get('/download/:filename', async (req: Request, res: Response) => {
