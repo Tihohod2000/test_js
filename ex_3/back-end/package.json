@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node ./src/index.ts",
-    "dev": "nodemon --watch src --exec ts-node ./src/index.ts"
+    "dev": "nodemon --watch src --exec ts-node ./src/index.ts",
+    "dev2": "ts-node-dev --respawn src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,7 @@
     "ioredis": "^5.6.1",
     "multer": "^2.0.1",
     "npm": "^11.4.1",
-    "redis": "^5.5.6"
+    "redis": "^5.5.6",
+    "ts-node-dev": "^2.0.0"
   }
 }

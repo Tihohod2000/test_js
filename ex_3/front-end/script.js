@@ -10,7 +10,7 @@ document.getElementById('cityForm').addEventListener('submit', async (e) => {
 
     try {
         const encodedCity = encodeURIComponent(cityInput);
-        const url = `http://localhost:8000/weather?city=${encodedCity}`;
+        const url = `http://localhost:3000/weather?city=${encodedCity}`;
 
         const statusElement = document.getElementById('status-load');
         const resultElement = document.getElementById('result');
