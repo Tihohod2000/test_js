@@ -14,7 +14,6 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     const fileInput = document.getElementById('fileInput');
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
-    // formData.append('originalName', fileInput.files[0].name);
 
     try {
         const response = await fetch('http://localhost:3000/upload-file', {
